@@ -1,0 +1,21 @@
+{
+  "name": "nightlife-app",
+  "version": "1.0.0",
+  "description": "second fullstack project from fcc",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/azurite/Nightlife-App.git"
+  }
+  "keywords": [
+    "mern",
+    "nightlife",
+    "fullstack",
+    "fcc"
+  ],
+  "author": "azurite",
+  "license": "MIT"
+}
