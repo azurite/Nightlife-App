@@ -123,7 +123,7 @@ exports.pugLoader = function(options) {
       loaders: [
         {
           test: /\.pug$/,
-          loaders:["pug"],
+          loaders: ["pug"],
           include: options.include
         },
       ]
