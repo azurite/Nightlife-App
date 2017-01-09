@@ -3,12 +3,12 @@ const Req = require("./redux-request");
 const initialState = {
   mainSearch: {
     nightlife_location: "",
-    req: Req.init()
+    yelp_results: Req.init()
   },
-  locationDetail: {
+  location_detail: {
     is_also_going: Req.init()
   },
-  profile: null
+  user: null
 };
 
 module.exports = initialState;
