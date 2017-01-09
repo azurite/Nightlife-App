@@ -1,4 +1,5 @@
 node_modules
-build
+build/client/*.*
+build/server
 config/.env
 tests

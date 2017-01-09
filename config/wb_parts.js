@@ -12,7 +12,8 @@ exports.devServer = function(options) {
       inline: true,
       stats: "errors-only",
       host: options.host,
-      port: options.port
+      port: options.port,
+      contentBase: options.contentBase
     },
     plugins: [
       new webpack.HotModuleReplacementPlugin({

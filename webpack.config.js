@@ -20,6 +20,7 @@ const PATHS = {
   client: path.join(__dirname, "client"),
   backend: path.join(__dirname, "app"),
   main: path.join(__dirname, "server.js"),
+  contentBase: path.join(__dirname, "build", "client"),
   build: {
     client: path.join(__dirname, "build", "client"),
     server: path.join(__dirname, "build", "server")
@@ -52,7 +53,11 @@ switch(process.env.npm_lifecycle_event) {
       parts.pugLoader({ include: PATHS.client }),
       parts.babelLoader({ include: PATHS.app }),
       parts.extractCSS({ include: PATHS.style, chunkhash: false }),
-      parts.devServer({ host: process.env.HOST, port: process.env.PORT })
+      parts.devServer({
+        host: process.env.HOST,
+        port: process.env.PORT,
+        contentBase: PATHS.contentBase
+      })
   );
     break;
 
@@ -65,7 +70,7 @@ switch(process.env.npm_lifecycle_event) {
           chunkFilename: "[chunkhash].js"
         }
       },
-      parts.clean({ path: PATHS.build.client }),
+      parts.clean({ path: PATHS.build.client, exclude: ["media"] }),
       parts.extractBundle({ name: "vendor", entries: vendors }),
       parts.setFreeVariables(),
       parts.deduplicate(),
@@ -85,11 +90,11 @@ switch(process.env.npm_lifecycle_event) {
           chunkFilename: "[chunkhash].js"
         }
       },
-      parts.clean({ path: PATHS.build.client }),
+      parts.clean({ path: PATHS.build.client, exclude: ["media"] }),
       parts.extractBundle({ name: "vendor", entries: vendors }),
       parts.pugLoader({ include: PATHS.client }),
       parts.babelLoader({ include: PATHS.app }),
-      parts.extracCSS({ include: PATHS.style, chunkhash: true })
+      parts.extractCSS({ include: PATHS.style, chunkhash: true })
     );
     break;
 
@@ -104,7 +109,7 @@ switch(process.env.npm_lifecycle_event) {
           filename: "backend.js"
         }
       },
-      parts.clean({ path: PATHS.build.server }),
+      parts.clean({ path: PATHS.build.server, exclude: ["media"] }),
       parts.nodeModules(),
       parts.setFreeVariables(),
       parts.deduplicate(),
@@ -124,7 +129,7 @@ switch(process.env.npm_lifecycle_event) {
           filename: "backend.js"
         }
       },
-      parts.clean({ path: PATHS.build.server }),
+      parts.clean({ path: PATHS.build.server, exclude: ["media"] }),
       parts.nodeModules(),
       parts.babelLoader({ include: [PATHS.app, PATHS.main, PATHS.backend] })
     );

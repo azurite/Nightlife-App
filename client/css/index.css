@@ -1,3 +1,15 @@
-#app {
-  background-color: lightsteelblue;
+html {
+  background: url("/media/zurich-city-1920x1080-wallpaper-4095.jpg") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+.transparent {
+  background-color: transparent !important;
+}
+
+.title-main {
+  text-align: center;
 }
