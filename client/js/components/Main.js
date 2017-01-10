@@ -1,8 +1,8 @@
 const React = require("react");
 const { Grid, Row, Col, Button, Form, FormGroup, InputGroup, FormControl } = require("react-bootstrap");
 
-//const Venue = require("./VenueCard");
-//const sampleData = require("../dev/sample_yelp_data.js").businesses;
+const Venue = require("./VenueCard");
+const sampleData = require("../dev/sample_yelp_data.js").businesses;
 
 const Main = React.createClass({
   render: function() {
@@ -26,16 +26,17 @@ const Main = React.createClass({
         </Row>
         <Row>
           <Col md={6} sm={8} xs={10} mdOffset={3} smOffset={2} xsOffset={1}>
-            {/*sampleData.map((v) => {
+            {sampleData.map((v) => {
               return (
                 <Venue
                   key={v.id}
+                  id={v.id}
                   name={v.name}
                   image_url={v.image_url}
                   snippet_text={v.snippet_text}
                 />
               );
-            })*/}
+            })}
           </Col>
         </Row>
       </Grid>
