@@ -25,7 +25,7 @@ const App = React.createClass({
       return (
         <Nav pullRight>
           <LinkContainer to="/login">
-            <NavItem>Login</NavItem>
+            <NavItem className="menu-item">Login</NavItem>
           </LinkContainer>
         </Nav>
       );
@@ -34,14 +34,14 @@ const App = React.createClass({
   render: function() {
     return (
       <div id="app-data-root">
-        <Navbar>
+        <Navbar className="menu bg-red border-red">
           <Navbar.Header>
-            <Navbar.Brand>Food-out</Navbar.Brand>
+            <Navbar.Brand className="menu-head">Food-out</Navbar.Brand>
             <Navbar.Toggle/>
           </Navbar.Header>
           <Navbar.Collapse>
             <Nav>
-              <IndexLinkContainer to="/"><NavItem>Home</NavItem></IndexLinkContainer>
+              <IndexLinkContainer to="/"><NavItem className="menu-item">Home</NavItem></IndexLinkContainer>
             </Nav>
             {this.dynamicMenu()}
           </Navbar.Collapse>

@@ -6,7 +6,7 @@ const Main = React.createClass({
     return (
       <Grid fluid>
         <Row>
-          <Col sm={8} xs={10} smOffset={2} xsOffset={1}>
+          <Col md={6} sm={8} xs={10} mdOffset={3} smOffset={2} xsOffset={1}>
             <h1 className="title-main">Where are you going tonight?</h1>
             <Form>
               <FormGroup>
@@ -14,7 +14,7 @@ const Main = React.createClass({
                   <InputGroup.Addon><i className="fa fa-search"></i></InputGroup.Addon>
                   <FormControl type="text" name="query"/>
                   <InputGroup.Button>
-                    <Button>Go!</Button>
+                    <Button className="btn-go bg-red">Go!</Button>
                   </InputGroup.Button>
                 </InputGroup>
               </FormGroup>
