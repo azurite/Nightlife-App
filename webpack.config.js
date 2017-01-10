@@ -50,6 +50,7 @@ switch(process.env.npm_lifecycle_event) {
     config = merge(
       common,
       parts.htmlPlugin({ template: PATHS.template }),
+      parts.extractBundle({ name: "vendor", entries: vendors }),
       parts.pugLoader({ include: PATHS.client }),
       parts.babelLoader({ include: PATHS.app }),
       parts.extractCSS({ include: PATHS.style, chunkhash: false }),
