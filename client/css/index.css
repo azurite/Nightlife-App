@@ -1,3 +1,6 @@
+@import url("./menu.css");
+@import url("./red_button.css");
+
 html {
   background: url("/media/zurich-city-1920x1080-wallpaper-4095.jpg") no-repeat center center fixed;
   -webkit-background-size: cover;
@@ -18,31 +21,6 @@ body {
   border-color: #D01031;
 }
 
-.menu {
-  border-radius: 0;
-}
-
-.menu-head {
-  color: #ffffff !important;
-}
-
-.menu-item > a {
-  color: #ffffff !important;
-}
-
-.menu-item > a:hover {
-  color: #D01031 !important;
-}
-
-.menu-item:hover {
-  background-color: #ffffff !important;
-}
-
-.menu-item.active > a {
-  color: #D01031 !important;
-  background-color: #ffffff !important;
-}
-
 .transparent-background {
   position: absolute;
   top: 0;
@@ -61,12 +39,14 @@ body {
   text-align: center;
 }
 
-.btn-go {
+.login-title {
   color: #ffffff;
-  border-color: #D01031;
 }
 
-.btn-go:hover {
-  color: #D01031;
-  background-color: #ffffff;
+.social-login {
+  margin-top: 20%;
+}
+
+.social-login > button {
+  margin-bottom: 10px;
 }

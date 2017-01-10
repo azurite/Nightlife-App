@@ -12,9 +12,9 @@ const Main = React.createClass({
               <FormGroup>
                 <InputGroup>
                   <InputGroup.Addon><i className="fa fa-search"></i></InputGroup.Addon>
-                  <FormControl type="text" name="query"/>
+                  <FormControl type="text" name="query" placeholder="City or Province"/>
                   <InputGroup.Button>
-                    <Button className="btn-go bg-red">Go!</Button>
+                    <Button className="btn-red">Go!</Button>
                   </InputGroup.Button>
                 </InputGroup>
               </FormGroup>
