@@ -1,7 +1,14 @@
 .venue-card {
+  margin-top: 10px;
+  margin-bottom: 10px;
   padding: 8px;
   color: #ffffff;
   background-color: #D01031;
+}
+
+.venue-card:hover, .venue-card:hover img, .venue-card:hover h3, .venue-card:hover p {
+  background-color: #ffffff;
+  color: #D01031;
 }
 
 .vc-img {
