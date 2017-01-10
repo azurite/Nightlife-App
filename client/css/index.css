@@ -1,5 +1,6 @@
 @import url("./menu.css");
 @import url("./red_button.css");
+@import url("./venue_card.css");
 
 html {
   background: url("/media/zurich-city-1920x1080-wallpaper-4095.jpg") no-repeat center center fixed;

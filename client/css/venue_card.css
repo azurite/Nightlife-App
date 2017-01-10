@@ -1,0 +1,10 @@
+.venue-card {
+  padding: 8px;
+  color: #ffffff;
+  background-color: #D01031;
+}
+
+.vc-img {
+  max-height: 180px;
+  max-width: 180px;
+}
