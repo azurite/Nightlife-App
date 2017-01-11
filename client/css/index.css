@@ -1,6 +1,7 @@
 @import url("./menu.css");
 @import url("./red_button.css");
 @import url("./venue_card.css");
+@import url("./venue.css");
 
 html {
   background: url("/media/zurich-city-1920x1080-wallpaper-4095.jpg") no-repeat center center fixed;
@@ -50,4 +51,13 @@ body {
 
 .social-login > button {
   margin-bottom: 10px;
+}
+
+.show-more {
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+
+.last-row {
+  margin-bottom: 16px;
 }

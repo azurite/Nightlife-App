@@ -9,3 +9,7 @@
   background-color: #ffffff;
   border-color: #ffffff;
 }
+
+.btn-edge {
+  border-radius: 0;
+}
