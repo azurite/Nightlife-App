@@ -1,0 +1,51 @@
+.venue-detail {
+  padding: 8px;
+  color: #ffffff;
+  background-color: #D01031;
+}
+
+.venue-info > img {
+  margin: 4px auto;
+}
+
+.v-center-title {
+  padding: 45px;
+}
+
+.is-going-list {
+  background-color: #ffffff;
+  color: #D01031;
+  padding-bottom: 6px;
+}
+
+.is-going-list > h3 {
+  text-decoration: underline;
+  margin-top: 32px;
+  margin-bottom: 24px;
+}
+
+.is-going-user {
+  margin-top: 8px;
+  margin-bottom: 8px;
+  padding: 8px;
+  background-color: #D01031;
+  color: #ffffff;
+}
+
+.is-going-user > img {
+  display: inline-block;
+  max-height: 50px;
+}
+
+.is-going-user > span {
+  margin-left: 32px;
+}
+
+.border-white {
+  border-color: #ffffff;
+  border-width: 2px;
+}
+
+.align-right {
+  float: right;
+}

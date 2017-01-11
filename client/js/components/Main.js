@@ -2,6 +2,7 @@ const React = require("react");
 const { Grid, Row, Col, Button, Form, FormGroup, InputGroup, FormControl } = require("react-bootstrap");
 
 const Venue = require("./VenueCard");
+const ShowMore = require("./Paginate");
 const sampleData = require("../dev/sample_yelp_data.js").businesses;
 
 const Main = React.createClass({
@@ -37,6 +38,11 @@ const Main = React.createClass({
                 />
               );
             })}
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={12} className="text-center show-more">
+            <ShowMore onClick={() => { return 0; }} isLoading={false}/>
           </Col>
         </Row>
       </Grid>

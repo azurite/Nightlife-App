@@ -18,6 +18,7 @@ const User = React.createClass({
                 </FormGroup>
                 <FormGroup>
                   <Button className="btn-red">Sign In</Button>
+                  <Button className="btn-red align-right">Register</Button>
                 </FormGroup>
               </Form>
             </div>
