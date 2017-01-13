@@ -1,4 +1,5 @@
 const React = require("react");
+const { Link }  = require("react-router");
 const { Grid, Row, Col, Form, FormGroup, FormControl, Button } = require("react-bootstrap");
 
 const User = React.createClass({
@@ -18,7 +19,9 @@ const User = React.createClass({
                 </FormGroup>
                 <FormGroup>
                   <Button className="btn-red">Sign In</Button>
-                  <Button className="btn-red align-right">Register</Button>
+                  <Link to="/register">
+                    <Button className="btn-red align-right">Register</Button>
+                  </Link>
                 </FormGroup>
               </Form>
             </div>
