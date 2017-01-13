@@ -61,3 +61,7 @@ body {
 .last-row {
   margin-bottom: 16px;
 }
+
+.label-red {
+  color: #D01031;
+}

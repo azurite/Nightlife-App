@@ -1,4 +1,4 @@
-.venue-detail {
+.venue-detail, .user-profile {
   padding: 8px;
   color: #ffffff;
   background-color: #D01031;
@@ -8,8 +8,22 @@
   margin: 4px auto;
 }
 
+.user-info > img {
+  margin: 4px auto;
+  max-height: 200px;
+}
+
 .v-center-title {
   padding: 45px;
+}
+
+.user-center-title {
+  padding: 35px;
+  text-align: center;
+}
+
+.user-center-title > button {
+  margin-right: 8px;
 }
 
 .is-going-list {
