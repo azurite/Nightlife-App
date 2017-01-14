@@ -28,7 +28,7 @@ const User = React.createClass({
             {sample.currently_going_to.map((v, i) => {
               return (
                 <Link to="/venue/old-crow-zürich">
-                  <Venue key={i} url={v.image_url} name={v.name}/>
+                  <Venue key={i} url={v.image_url} name={v.name} is_going/>
                 </Link>
               );
             })}

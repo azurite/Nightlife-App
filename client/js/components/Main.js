@@ -1,24 +1,38 @@
 const React = require("react");
+const { connect } = require("react-redux");
 const { Grid, Row, Col, Button, Form, FormGroup, InputGroup, FormControl } = require("react-bootstrap");
-
 const Venue = require("./VenueCard");
 const ShowMore = require("./Paginate");
-const sampleData = require("../dev/sample_yelp_data.js").businesses;
+const Loading = require("./Loading");
+const actions = require("../actions/main_search");
+const Api = require("../request");
 
 const Main = React.createClass({
+  propTypes: {
+    input_value: React.PropTypes.string.isRequired,
+    yelp_results: React.PropTypes.object.isRequired,
+    handleChange: React.PropTypes.func.isRequired,
+    submitSearch: React.PropTypes.func.isRequired
+  },
   render: function() {
     return (
       <Grid fluid>
         <Row>
           <Col md={6} sm={8} xs={10} mdOffset={3} smOffset={2} xsOffset={1}>
             <h1 className="title-main">Where are you going tonight?</h1>
-            <Form>
+            <Form onSubmit={this.props.submitSearch.bind(this, false)}>
               <FormGroup>
                 <InputGroup>
                   <InputGroup.Addon><i className="fa fa-search"></i></InputGroup.Addon>
-                  <FormControl type="text" name="query" placeholder="City or Province"/>
+                  <FormControl
+                    type="text"
+                    name="query"
+                    placeholder="City or Province"
+                    value={this.props.input_value}
+                    onChange={this.props.handleChange}
+                  />
                   <InputGroup.Button>
-                    <Button className="btn-red">Go!</Button>
+                    <Button type="submit" className="btn-red">Go!</Button>
                   </InputGroup.Button>
                 </InputGroup>
               </FormGroup>
@@ -27,10 +41,10 @@ const Main = React.createClass({
         </Row>
         <Row>
           <Col md={6} sm={8} xs={10} mdOffset={3} smOffset={2} xsOffset={1}>
-            {sampleData.map((v) => {
+            {this.props.yelp_results.data.map((v, i) => {
               return (
                 <Venue
-                  key={v.id}
+                  key={i}
                   id={v.id}
                   name={v.name}
                   image_url={v.image_url}
@@ -38,11 +52,22 @@ const Main = React.createClass({
                 />
               );
             })}
+            {
+              this.props.yelp_results.isPending &&
+              this.props.yelp_results.data.length === 0 &&
+              <Loading size="fa-3x"/>
+            }
           </Col>
         </Row>
         <Row>
           <Col xs={12} className="text-center show-more">
-            <ShowMore onClick={() => { return 0; }} isLoading={false}/>
+            {
+              this.props.yelp_results.data.length !== 0 &&
+              <ShowMore
+                onClick={this.props.submitSearch.bind(this, true)}
+                isLoading={this.props.yelp_results.isPending}
+              />
+            }
           </Col>
         </Row>
       </Grid>
@@ -50,4 +75,35 @@ const Main = React.createClass({
   }
 });
 
-module.exports = Main;
+const mapStateToProps = (state) => {
+  const part = state.mainSearch;
+  return {
+    input_value: part.nightlife_location,
+    yelp_results: part.yelp_results
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    handleChange: (e) => {
+      dispatch(actions.updateInput(e.target.value));
+    },
+    submitSearch: (paginate, e) => {
+      e.preventDefault();
+      dispatch(actions.submitSearch(paginate));
+      Api.pretendFetchYelp((err, data) => {
+        if(err) {
+          return dispatch(actions.submitFailure(err, paginate));
+        }
+        dispatch(actions.submitSuccess(data, paginate));
+      });
+    }
+  };
+};
+
+const MainContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Main);
+
+module.exports = MainContainer;
