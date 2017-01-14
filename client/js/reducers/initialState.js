@@ -3,9 +3,11 @@ const Req = require("./redux-request");
 const initialState = {
   mainSearch: {
     nightlife_location: "",
-    yelp_results: Req.init()
+    yelp_results: Req.init(),
+    page: 0
   },
   location_detail: {
+    venue: Req.init(),
     is_also_going: Req.init()
   },
   user: null

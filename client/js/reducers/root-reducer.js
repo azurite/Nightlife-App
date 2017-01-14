@@ -3,7 +3,7 @@ const location_detail = require("./location_detail");
 
 const root_reducer = function(state, action) {
   return {
-    mainSearch: mainSearch(state.nightlife_location, action),
+    mainSearch: mainSearch(state.mainSearch, action),
     location_detail: location_detail(state.location_detail, action)
   };
 };

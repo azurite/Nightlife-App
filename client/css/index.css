@@ -65,3 +65,9 @@ body {
 .label-red {
   color: #D01031;
 }
+
+.loading-icon {
+  padding-top: 50px;
+  text-align: center;
+  color: #ffffff;
+}
