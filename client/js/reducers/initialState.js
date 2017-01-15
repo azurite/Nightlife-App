@@ -10,6 +10,17 @@ const initialState = {
     venue: Req.init(),
     is_also_going: Req.init()
   },
+  login: {
+    email: "",
+    password: "",
+    submit: Req.init()
+  },
+  register: {
+    fullName: "",
+    email: "",
+    password: "",
+    submit: Req.init()
+  },
   user: null
 };
 

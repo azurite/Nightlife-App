@@ -22,3 +22,8 @@
   color: #D01031 !important;
   background-color: #ffffff !important;
 }
+
+.menu-thumbnail {
+  display: inline-block;
+  max-height: 35px;
+}
