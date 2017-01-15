@@ -17,5 +17,22 @@ module.exports = {
       type: types.VENUE_ERROR,
       error: err
     };
+  },
+  fetchIsGoing: function() {
+    return {
+      type: types.FETCH_IS_GOING
+    };
+  },
+  isGoingSuccess: function(users) {
+    return {
+      type: types.IS_GOING_SUCCESS,
+      users: users
+    };
+  },
+  isGoingError: function(err) {
+    return {
+      type: types.IS_GOING_ERROR,
+      error: err
+    };
   }
 };
