@@ -69,5 +69,12 @@ body {
 .loading-icon {
   padding-top: 50px;
   text-align: center;
+}
+
+.icon-white {
   color: #ffffff;
+}
+
+.icon-red {
+  color: #D01031;
 }

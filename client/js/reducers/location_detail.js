@@ -18,6 +18,21 @@ const location_detail = function(state, action) {
         venue: Req.fail(state.venue, action.error, false)
       });
 
+    case types.FETCH_IS_GOING:
+      return Object.assign({}, state, {
+        is_also_going: Req.begin(state.is_also_going, false)
+      });
+
+    case types.IS_GOING_SUCCESS:
+      return Object.assign({}, state, {
+        is_also_going: Req.done(state.is_also_going, action.users, false)
+      });
+
+    case types.IS_GOING_ERROR:
+      return Object.assign({}, state, {
+        is_also_going: Req.fail(state.is_also_going, action.error, false)
+      });
+
     default:
       return state;
   }
