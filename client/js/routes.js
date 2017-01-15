@@ -9,13 +9,30 @@ const VenueDetail = require("./components/VenueDetail");
 const User = require("./components/User");
 
 const routes = function(store) {
+
+  const delegateAuth = function(nextState, replaceState) {
+    const state = store.getState();
+
+    if(state.user) {
+      replaceState({ pathname: "/user/" + state.user.username });
+    }
+  };
+
+  const requireAuth = function(nextState, replaceState) {
+    const state = store.getState();
+
+    if(state.user === null) {
+      replaceState({ pathname: "/login" });
+    }
+  };
+
   return (
     <Route path="/" component={App}>
       <IndexRoute component={Main}/>
-      <Route path="/login" component={Login}/>
-      <Route path="/register" component={Register}/>
+      <Route path="/login" component={Login} onEnter={delegateAuth}/>
+      <Route path="/register" component={Register} onEnter={delegateAuth}/>
       <Route path="/venue/:id" component={VenueDetail}/>
-      <Route path="/user/:username" component={User}/>
+      <Route path="/user/:username" component={User} onEnter={requireAuth}/>
     </Route>
   );
 };

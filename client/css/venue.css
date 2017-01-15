@@ -32,8 +32,20 @@
   padding-bottom: 6px;
 }
 
-.is-going-list > h3 {
+.user-list-title {
   text-decoration: underline;
+  margin-top: 32px;
+  margin-bottom: 24px;
+}
+
+.user-list-title > a {
+  padding: 4px;
+  color: #ffffff;
+  background-color: #D01031;
+}
+
+.user-list-title.loggedout {
+  text-decoration: none;
   margin-top: 32px;
   margin-bottom: 24px;
 }

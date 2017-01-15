@@ -79,15 +79,17 @@ const VenueDetail = React.createClass({
             <Col sm={8} xs={10} smOffset={2} xsOffset={1} className="is-going-list">
               {
                 !isLoggedIn &&
-                <h3 className="text-center"><Link to="/login">Login</Link> to see who is going</h3>
+                <h3 className="text-center user-list-title loggedout">
+                  <Link to="/login">Login</Link> to see who is going
+                </h3>
               }
               {users.isPending && <Loading size="fa-2x" color="red"/>}
               {
-                !isLoggedIn && users.success &&
-                <h3 className="text-center">{users.data.length} people are going there tonight</h3>
+                isLoggedIn && users.success &&
+                <h3 className="text-center user-list-title">{users.data.length} people are going there tonight</h3>
               }
               {
-                !isLoggedIn &&
+                isLoggedIn &&
                 users.data.map((u, i) => {
                   return <User key={i} url={u.image_url} name={u.username}/>;
                 })
@@ -119,15 +121,17 @@ const mapStateToProps = (state, ownProps) => {
     })(),
     isAlsoGoing: state.location_detail.is_also_going,
     isLoggedIn: !!state.user,
-    userIsGoing: !!(state.user && state.user.isGoingTo.find((v) => { return v.id === ownProps.params.id; }))
+    userIsGoing: !!(state.user && state.user.isGoingTo.find((v) => {
+      return v.id === ownProps.params.id;
+    }))
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     fetchVenueAndIsGoing: function(isLoggedIn) {
       dispatch(actions.fetchVenueData());
-      Api.pretendFetchDetail((err, venue) => {
+      Api.pretendFetchDetail(ownProps.params.id, (err, venue) => {
         if(err) {
           return dispatch(actions.venueError(err));
         }
