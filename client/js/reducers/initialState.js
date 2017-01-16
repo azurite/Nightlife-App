@@ -21,7 +21,8 @@ const initialState = {
     password: "",
     submit: Req.init()
   },
-  user: null
+  user: null,
+  logout: Req.init()
 };
 
 module.exports = initialState;

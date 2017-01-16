@@ -1,28 +1,29 @@
 const types = require("../actions/types");
 const Req = require("./redux-request");
 
-const login = function(state, action) {
+const register = function(state, action) {
   switch(action.type) {
-    case types.UPDATE_LOGIN_INPUT:
+    case types.UPDATE_REGISTER_INPUT:
       return Object.assign({}, state, {
         [action.field]: action.value
       });
 
-    case types.SUBMIT_LOGIN:
+    case types.REGISTER:
       return Object.assign({}, state, {
         submit: Req.begin(state.submit, false)
       });
 
-    case types.LOGIN_SUCCESS:
+    case types.REGISTER_SUCCESS:
       return Object.assign({}, state, {
+        fullName: "",
         email: "",
         password: "",
         submit: Req.done(state.submit, [], false)
       });
 
-    case types.LOGIN_ERROR:
+    case types.REGISTER_ERROR:
       return Object.assign({}, state, {
-        submit: Req.fail(state.submit, action.error, false)
+        submit: Req.fail(state.submit, [action.error], false)
       });
 
     default:
@@ -30,4 +31,4 @@ const login = function(state, action) {
   }
 };
 
-module.exports = login;
+module.exports = register;

@@ -5,6 +5,12 @@ const user = function(state, action) {
     case types.LOGIN_SUCCESS:
       return action.user;
 
+    case types.REGISTER_SUCCESS:
+      return action.user;
+
+    case types.LOGOUT_SUCCESS:
+      return null;
+
     default:
       return state;
   }

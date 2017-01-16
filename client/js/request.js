@@ -17,9 +17,16 @@ const request = {
       cb(null, require("./dev/sample_is_going_to.js"));
     });
   },
-  pretendLogin: function pretendLogin(email, pw, cb) {
+  pretendLogin: function pretendLogin(info, cb) {
     var user = require("./dev/sample_user.js");
     setTimeout(cb, 1000, null, user);
+  },
+  pretendRegister: function pretendRegister(info, cb) {
+    var user = require("./dev/sample_user.js");
+    setTimeout(cb, 1000, null, user);
+  },
+  pretendLogout: function pretendLogout(cb) {
+    setTimeout(cb, 1000);
   }
 };
 
