@@ -86,8 +86,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     login: (e) => {
       e.preventDefault();
+      let info = {
+        email: e.target[0].value,
+        password: e.target[1].value
+      };
       dispatch(actions.submitLogin());
-      Api.pretendLogin(e.target[0].value, e.target[1].value, (err, user) => {
+      Api.pretendLogin(info, (err, user) => {
         if(err) {
           return dispatch(actions.loginError(err));
         }
