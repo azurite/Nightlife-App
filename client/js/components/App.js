@@ -1,6 +1,6 @@
 const React = require("react");
 const { connect } = require("react-redux");
-const { Navbar, Nav, NavItem, Image } = require("react-bootstrap");
+const { Navbar, Nav, NavItem } = require("react-bootstrap");
 const { LinkContainer, IndexLinkContainer } = require("react-router-bootstrap");
 
 const App = React.createClass({
@@ -15,7 +15,6 @@ const App = React.createClass({
           <LinkContainer to={"/user/" + this.props.user.username}>
             <NavItem className="menu-item">
               {this.props.user.username}
-              {/*<Image className="menu-thumbnail" circle responsive src={this.props.user.image_url}/>*/}
             </NavItem>
           </LinkContainer>
         </Nav>
