@@ -11,6 +11,7 @@ const Main = React.createClass({
   propTypes: {
     input_value: React.PropTypes.string.isRequired,
     yelp_results: React.PropTypes.object.isRequired,
+    page: React.PropTypes.number.isRequired,
     handleChange: React.PropTypes.func.isRequired,
     submitSearch: React.PropTypes.func.isRequired
   },
@@ -20,7 +21,7 @@ const Main = React.createClass({
         <Row>
           <Col md={6} sm={8} xs={10} mdOffset={3} smOffset={2} xsOffset={1}>
             <h1 className="title-main">Where are you going tonight?</h1>
-            <Form onSubmit={this.props.submitSearch.bind(this, false)}>
+            <Form onSubmit={this.props.submitSearch.bind(this, false, this.props.page, this.props.input_value)}>
               <FormGroup>
                 <InputGroup>
                   <InputGroup.Addon><i className="fa fa-search"></i></InputGroup.Addon>
@@ -41,6 +42,11 @@ const Main = React.createClass({
         </Row>
         <Row>
           <Col md={6} sm={8} xs={10} mdOffset={3} smOffset={2} xsOffset={1}>
+            {
+              this.props.yelp_results.success &&
+              this.props.yelp_results.data.length === 0 &&
+              <p className="text-center text-white">no results</p>
+            }
             {this.props.yelp_results.data.map((v, i) => {
               return (
                 <Venue
@@ -64,7 +70,7 @@ const Main = React.createClass({
             {
               this.props.yelp_results.data.length !== 0 &&
               <ShowMore
-                onClick={this.props.submitSearch.bind(this, true)}
+                onClick={this.props.submitSearch.bind(this, true, this.props.page, this.props.input_value)}
                 isLoading={this.props.yelp_results.isPending}
               />
             }
@@ -79,7 +85,8 @@ const mapStateToProps = (state) => {
   const part = state.mainSearch;
   return {
     input_value: part.nightlife_location,
-    yelp_results: part.yelp_results
+    yelp_results: part.yelp_results,
+    page: part.page
   };
 };
 
@@ -88,10 +95,20 @@ const mapDispatchToProps = (dispatch) => {
     handleChange: (e) => {
       dispatch(actions.updateInput(e.target.value));
     },
-    submitSearch: (paginate, e) => {
+    submitSearch: (paginate, page, value, e) => {
       e.preventDefault();
+      if(value === "") {
+        return;
+      }
       dispatch(actions.submitSearch(paginate));
-      Api.pretendFetchYelp((err, data) => {
+
+      var opt = {
+        limit: 10,
+        offset: paginate ? page * 10 : 0,
+        location: value
+      };
+
+      Api.real.fetchYelp(opt, (err, data) => {
         if(err) {
           return dispatch(actions.submitFailure(err, paginate));
         }

@@ -1,4 +1,43 @@
+const Axios = require("axios");
+
+const _request = function() {
+
+  const stringify = function(q) {
+    var qs = "?", keys = Object.keys(q);
+
+    for(var i = 0; i < keys.length; i++) {
+      qs += keys[i] + "=" + q[keys[i]];
+      i < (keys.length - 1) ? qs += "&" : false;
+    }
+    return qs;
+  };
+
+  return {
+    fetchYelp: function fetchYelp(opt, cb) {
+      Axios.get("/api/yelp/search" + stringify(opt))
+      .then((res) => {
+        if(res.data.statusCode === 400) {
+          return cb(null, []);
+        }
+        cb(null, res.data.businesses);
+      })
+      .catch(cb);
+    },
+    fetchBusiness: function fetchBusiness(opt, cb) {
+      Axios.get("/api/yelp/business" + stringify(opt))
+      .then((res) => {
+        if(res.data.statusCode === 400) {
+          return cb();
+        }
+        cb(null, res.data);
+      })
+      .catch(cb);
+    }
+  };
+};
+
 const request = {
+  /*
   pretendFetchYelp: function pretendFetchYelp(cb) {
     require.ensure([], function(require) {
       cb(null, require("./dev/sample_yelp_data.js").businesses);
@@ -12,6 +51,7 @@ const request = {
       cb(null, venue);
     });
   },
+  */
   pretendFetchIsGoing: function pretendFetchIsGoing(cb) {
     require.ensure([], function(require) {
       cb(null, require("./dev/sample_is_going_to.js"));
@@ -27,7 +67,8 @@ const request = {
   },
   pretendLogout: function pretendLogout(cb) {
     setTimeout(cb, 1000);
-  }
+  },
+  real: _request()
 };
 
 module.exports = request;
