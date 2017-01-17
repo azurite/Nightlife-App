@@ -12,7 +12,7 @@ const VenueCard = function(props) {
           </Col>
           <Col xs={9}>
             <h3 className="venue-card vc-name">{props.name}</h3>
-            <p className="venue-card vc-snippet">{props.snippet_text}</p>
+            <p className="venue-card vc-snippet">{props.snippet_text || "No description"}</p>
           </Col>
         </Row>
       </div>

@@ -131,7 +131,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     fetchVenueAndIsGoing: function(isLoggedIn) {
       dispatch(actions.fetchVenueData());
-      Api.pretendFetchDetail(ownProps.params.id, (err, venue) => {
+
+      var opt = {
+        id: ownProps.params.id
+      };
+
+      Api.real.fetchBusiness(opt, (err, venue) => {
         if(err) {
           return dispatch(actions.venueError(err));
         }

@@ -79,7 +79,7 @@ body {
   text-align: center;
 }
 
-.icon-white {
+.icon-white, .text-white {
   color: #ffffff;
 }
 

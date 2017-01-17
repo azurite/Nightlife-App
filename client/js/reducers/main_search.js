@@ -15,7 +15,7 @@ const mainSearch = function(state, action) {
 
     case types.SUBMIT_SUCCESS:
       return Object.assign({}, state, {
-        page: action.paginate ? state.page + 1 : 0,
+        page: action.paginate ? state.page + 1 : 1,
         yelp_results: Req.done(state.yelp_results, action.venues, action.paginate)
       });
 
