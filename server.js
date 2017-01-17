@@ -7,10 +7,10 @@ const routes = require("./app/routes.js");
 const app = express();
 
 app.set("view engine", "pug");
-app.set("views", path.join(__dirname, "client"));
+app.set("views", path.join(process.cwd(), "client"));
 
-app.use(favicon(path.join(__dirname, "build", "client", "media", "facivon.ico")));
-app.use(express.static(path.join(__dirname, "build", "client")));
+app.use(favicon(path.join(process.cwd(), "build", "client", "media", "favicon.ico")));
+app.use(express.static(path.join(process.cwd(), "build", "client")));
 
 app.use(routes());
 

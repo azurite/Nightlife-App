@@ -1,10 +1,11 @@
 const React = require("react");
+const { createStore } = require("redux");
 const { Provider } = require("react-redux");
 const { renderToString } = require("react-dom/server");
 const { match, RouterContext } = require("react-router");
 
 const routes = require("../client/js/routes.js");
-const assets = require("./serve-bundles.js")({
+const assets = require("./serve_bundles.js")({
   root: process.cwd(),
   path: "/build/client",
   publicPath: "/",
@@ -13,8 +14,17 @@ const assets = require("./serve-bundles.js")({
   }
 });
 
+const reducer = require("../client/js/reducers/root-reducer");
+const initialState = require("../client/js/reducers/initialState");
+
 const express = require("express");
 const router = express.Router();
+
+router.get("*", (req, res, next) => {
+  const store = createStore(reducer, initialState);
+  req.reduxStore = store;
+  next();
+});
 
 router.get("*", (req, res) => {
   const preloadedState = req.reduxStore.getState();
