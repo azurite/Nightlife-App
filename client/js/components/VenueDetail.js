@@ -19,7 +19,12 @@ const VenueDetail = React.createClass({
     fetchIsGoing: React.PropTypes.func.isRequired
   },
   componentDidMount: function() {
+    if(this.props.venue.error) {
+      //server already didn't find it. No need to search again
+      return;
+    }
     if(!this.props.venue.data[0]) {
+      //scenario 3)
       this.props.fetchVenueAndIsGoing(this.props.isLoggedIn);
       return;
     }
@@ -63,7 +68,7 @@ const VenueDetail = React.createClass({
                 </Row>
               }
               {
-                !vData &&
+                venue.error &&
                 <Row>
                   <Col xs={12} className="v-center-title">
                     <h1 className="title-main">Sorry :( We couldn't find your venue</h1>
@@ -105,18 +110,23 @@ const mapStateToProps = (state, ownProps) => {
   return {
     venue: (() => {
       let loadVenue = state.location_detail.venue;
-
+      //server found location
       if(loadVenue.data[0] && loadVenue.data[0].id === ownProps.params.id) {
         return loadVenue;
       }
+      //server didn't find location
+      if(loadVenue.error) {
+        return loadVenue;
+      }
+
       loadVenue = state.mainSearch.yelp_results.data.find((v) => {
         return v.id === ownProps.params.id;
       });
-
+      //venue was in searchlist (user came from there)
       if(loadVenue) {
         return Req.done(Req.init(), [loadVenue], false);
       }
-
+      //scenario 3)
       return Req.init();
     })(),
     isAlsoGoing: state.location_detail.is_also_going,

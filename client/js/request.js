@@ -21,17 +21,26 @@ const _request = function() {
         }
         cb(null, res.data.businesses);
       })
-      .catch(cb);
+      .catch(function(err) {
+        err.message = err.message || "error with the yelp api";
+        cb(err);
+      });
     },
     fetchBusiness: function fetchBusiness(opt, cb) {
       Axios.get("/api/yelp/business" + stringify(opt))
       .then((res) => {
         if(res.data.statusCode === 400) {
-          return cb();
+          return cb({ message: "'" + opt.id + "' didn't match any results"  });
         }
         cb(null, res.data);
       })
-      .catch(cb);
+      .catch(function(err) {
+        err.message = err.message || "error with the yelp api";
+        cb(err);
+      });
+    },
+    registerUser: function registerUser(opt, cb) {
+      
     }
   };
 };
