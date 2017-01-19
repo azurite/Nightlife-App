@@ -3,6 +3,14 @@ const { createStore } = require("redux");
 const { Provider } = require("react-redux");
 const { renderToString } = require("react-dom/server");
 const { match, RouterContext } = require("react-router");
+const Yelp = require("yelp");
+
+var yelp = new Yelp({
+  consumer_key: process.env.YELP_CONSUMER_KEY,
+  consumer_secret: process.env.YELP_CONSUMER_SECRET,
+  token: process.env.YELP_TOKEN,
+  token_secret: process.env.YELP_TOKEN_SECRET
+});
 
 const routes = require("../client/js/routes.js");
 const assets = require("./serve_bundles.js")({
@@ -16,6 +24,7 @@ const assets = require("./serve_bundles.js")({
 
 const reducer = require("../client/js/reducers/root-reducer");
 const initialState = require("../client/js/reducers/initialState");
+const actions = require("../client/js/actions/venue_detail");
 
 const express = require("express");
 const router = express.Router();
@@ -24,6 +33,25 @@ router.get("*", (req, res, next) => {
   const store = createStore(reducer, initialState);
   req.reduxStore = store;
   next();
+});
+
+router.get("/venue/:id", (req, res, next) => {
+  yelp.business(req.params.id)
+  .then(function(data) {
+    if(data.statusCode === 400) {
+      req.reduxStore.dispatch(actions.venueError({
+        message: "'" + req.params.id + "' didn't match any venues"
+      }));
+      return next();
+    }
+    req.reduxStore.dispatch(actions.venueSuccess(data));
+    next();
+  })
+  .catch(function(err) {
+    err.message = err.message || "error with the yelp api";
+    req.reduxStore.dispatch(actions.venueError(err));
+    next();
+  });
 });
 
 router.get("*", (req, res) => {
