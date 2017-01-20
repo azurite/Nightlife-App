@@ -82,18 +82,18 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     register: function(e) {
       e.preventDefault();
       let info = {
-        fullName: e.target[0].value,
+        name: e.target[0].value,
         email: e.target[1].value,
         password: e.target[2].value
       };
-      if(info.fullName === "" || info.email === "") {
+      if(info.name === "" || info.email === "") {
         return dispatch(actions.registerError({ message: "please enter your credentials" }));
       }
       if(info.password.length < 6) {
         return dispatch(actions.registerError({ message: "password must be at least 6 characters long" }));
       }
       dispatch(actions.register());
-      Api.pretendRegister(info, (err, user) => {
+      Api.real.registerUser(info, (err, user) => {
         if(err) {
           return dispatch(actions.registerError(err));
         }
