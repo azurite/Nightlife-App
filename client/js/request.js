@@ -22,7 +22,7 @@ const _request = function() {
         cb(null, res.data.businesses);
       })
       .catch(function(err) {
-        err.message = err.message || "error with the yelp api";
+        err.message = err.message || "internal server error";
         cb(err);
       });
     },
@@ -35,12 +35,22 @@ const _request = function() {
         cb(null, res.data);
       })
       .catch(function(err) {
-        err.message = err.message || "error with the yelp api";
+        err.message = err.message || "internal server error";
         cb(err);
       });
     },
     registerUser: function registerUser(opt, cb) {
-      
+      Axios.post("/api/user/register", opt)
+      .then((res) => {
+        if(res.data.statusCode === 500) {
+          return cb(res.data.error);
+        }
+        cb(null, res.data);
+      })
+      .catch((err) => {
+        err.message = err.message || "internal server error";
+        cb(err);
+      });
     }
   };
 };
