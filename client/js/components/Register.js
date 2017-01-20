@@ -52,6 +52,10 @@ const Register = React.createClass({
                 <Button type="submit" className="btn-red" disabled={submit.isPending}>
                   {submit.isPending ? "Loading..." : "Sign Up"}
                 </Button>
+                {
+                  submit.error &&
+                  <span className="err-msg">{submit.error.message}</span>
+                }
               </FormGroup>
             </Form>
           </Col>
@@ -82,6 +86,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         email: e.target[1].value,
         password: e.target[2].value
       };
+      if(info.fullName === "" || info.email === "") {
+        return dispatch(actions.registerError({ message: "please enter your credentials" }));
+      }
+      if(info.password.length < 6) {
+        return dispatch(actions.registerError({ message: "password must be at least 6 characters long" }));
+      }
       dispatch(actions.register());
       Api.pretendRegister(info, (err, user) => {
         if(err) {
@@ -89,6 +99,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         }
         dispatch(actions.registerSuccess(user));
         ownProps.router.push("/user/" + user.username);
+
+        dispatch(actions.updateRegisterInput("fullName", ""));
+        dispatch(actions.updateRegisterInput("email", ""));
+        dispatch(actions.updateRegisterInput("password", ""));
       });
     }
   };

@@ -90,6 +90,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         email: e.target[0].value,
         password: e.target[1].value
       };
+
+      if(info.email === "" || info.password === "") {
+        return;
+      }
       dispatch(actions.submitLogin());
       Api.pretendLogin(info, (err, user) => {
         if(err) {
@@ -97,6 +101,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         }
         dispatch(actions.loginSuccess(user));
         ownProps.router.push("/user/" + user.username);
+
+        dispatch(actions.updateLoginInput("email", ""));
+        dispatch(actions.updateLoginInput("password", ""));
       });
     }
   };

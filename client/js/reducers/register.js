@@ -23,7 +23,7 @@ const register = function(state, action) {
 
     case types.REGISTER_ERROR:
       return Object.assign({}, state, {
-        submit: Req.fail(state.submit, [action.error], false)
+        submit: Req.fail(state.submit, action.error, false)
       });
 
     default:
