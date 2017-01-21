@@ -70,33 +70,26 @@ User.methods.setPassword = function(password, cb) {
 // PRE: password to compare and callback function
 // POST: user model if password is correct. Otherwise an error
 User.methods.validatePassword = function(passwordCmp, cb) {
+  var self = this;
+
   pbkdf2(passwordCmp, this.get("local.salt"), function(err, hashCmp) {
     if(err) {
       return cb(err);
     }
-    if(scmp(hashCmp, new Buffer(this.get("local.hash", options.encoding)))) {
-      return cb(null, this);
+    if(scmp(hashCmp, new Buffer(self.get("local.hash"), options.encoding))) {
+      return cb(null, self);
     }
     else {
-      return cb(error.wrongUserNameOrPassword());
+      return cb(null, false);
     }
   });
-};
-
-User.methods.normalize = function() {
-  var norm = {
-    username: this.local.name,
-    image_url: this.local.image_url,
-    isGoingTo: this.isGoingTo
-  };
-  return norm;
 };
 
 // PRE: email address and boolean if hash and salt fields shall be included in result and optional callback function
 // POST: either the user or empty if no user was found. returns query if no callback is specified
 User.statics.findByEmail = function(email, selectCreds, cb) {
   var query = this.findOne({ "local.email": email });
-  
+
   if(selectCreds) {
     query.select("+local.hash +local.salt");
   }
@@ -121,7 +114,7 @@ User.statics.authenticate = function() {
       if(user) {
         return user.validatePassword(password, cb);
       }
-      return cb(error.wrongUserNameOrPassword());
+      return cb(null, false);
     });
   };
 };

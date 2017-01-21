@@ -1,5 +1,5 @@
 exports.userErrors = {
-  incorrectUsernameOrPassword: function(msg) {
+  wrongUsernameOrPassword: function(msg) {
     return new Error(msg || "wrong username or password");
   },
   emailAlreadyTaken: function(msg) {
