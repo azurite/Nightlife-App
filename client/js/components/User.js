@@ -29,6 +29,10 @@ const User = React.createClass({
                   {logout.isPending ? "Loading..." : "Logout"}
                 </Button>
                 <Button className="btn-red btn-edge border-white">Delete Account</Button>
+                {
+                  logout.error &&
+                  <span className="err-msg">{logout.error.message}</span>
+                }
               </Col>
             </Row>
           </Col>
@@ -61,7 +65,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     logout: function() {
       dispatch(actions.logout());
-      Api.pretendLogout((err) => {
+      Api.real.logoutUser((err) => {
         if(err) {
           return dispatch(actions.logoutError(err));
         }

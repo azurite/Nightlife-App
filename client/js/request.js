@@ -51,41 +51,40 @@ const _request = function() {
         err.message = err.message || "internal server error";
         cb(err);
       });
+    },
+    loginUser: function loginUser(opt, cb) {
+      Axios.post("/api/user/login", opt)
+      .then((res) => {
+        cb(null, res.data);
+      })
+      .catch((err) => {
+        if(err.response && err.response.status === 401) {
+          cb({ message: "wrong username or password" });
+        }
+        else {
+          err.message = err.message || "internal server error";
+          cb(err);
+        }
+      });
+    },
+    logoutUser: function logoutUser(cb) {
+      Axios.post("/api/user/logout")
+      .then((res) => {
+        cb(null, res.data);
+      })
+      .catch((err) => {
+        err.message = err.message || "internal server error";
+        cb(err);
+      });
     }
   };
 };
 
 const request = {
-  /*
-  pretendFetchYelp: function pretendFetchYelp(cb) {
-    require.ensure([], function(require) {
-      cb(null, require("./dev/sample_yelp_data.js").businesses);
-    });
-  },
-  pretendFetchDetail: function pretendFetchDetail(id, cb) {
-    require.ensure([], function(require) {
-      let venue = require("./dev/sample_yelp_data.js").businesses.find((v) => {
-        return v.id === id;
-      });
-      cb(null, venue);
-    });
-  },
-  */
   pretendFetchIsGoing: function pretendFetchIsGoing(cb) {
     require.ensure([], function(require) {
       cb(null, require("./dev/sample_is_going_to.js"));
     });
-  },
-  pretendLogin: function pretendLogin(info, cb) {
-    var user = require("./dev/sample_user.js");
-    setTimeout(cb, 1000, null, user);
-  },
-  pretendRegister: function pretendRegister(info, cb) {
-    var user = require("./dev/sample_user.js");
-    setTimeout(cb, 1000, null, user);
-  },
-  pretendLogout: function pretendLogout(cb) {
-    setTimeout(cb, 1000);
   },
   real: _request()
 };
