@@ -1,7 +1,30 @@
+require("./venue");
 const mongoose = require("mongoose");
 const crypto = require("crypto");
 const semver = require("semver");
 const scmp = require("scmp");
+
+const Venue = mongoose.model("venue");
+
+const ObjectId = function(id) {
+  return /^[a-fA-F0-9]{24}$/.test(id) === true ? id : "";
+};
+
+const createOrder = function(type, field, value) {
+  var order = {};
+
+  switch(type) {
+    case "add":
+      order.$push = { [field]: value };
+      break;
+
+    case "remove":
+      order.$pull = { [field]: value };
+      break;
+  }
+
+  return order;
+};
 
 var pbkdf2DigestSupport = semver.gte(process.version, "0.12.0");
 var error = require("./utils/errors").userErrors;
@@ -41,7 +64,7 @@ const User = new mongoose.Schema({
     token: { type: String, default: "" },
     profile: { type: Object, default: {} }
   },
-  isGoingTo: [{ id: String }]
+  isGoingTo: [{ type: mongoose.Schema.Types.ObjectId, ref: "venue" }]
 });
 
 // PRE: password to set and callback function
@@ -164,8 +187,65 @@ User.statics.deserializeUser = function() {
   var self = this;
 
   return function(id, cb) {
-    self.findById(id, cb);
+    self.findById(id)
+      .populate("isGoingTo")
+      .exec(cb);
   };
+};
+
+// PRE: type: "add" | "remove", _id: String, venue: { id: String, image_url: String }
+// POST: updated user document
+User.statics.goToVenueOrRemove = function(type, userId, venue, cb) {
+  this.findOneAndUpdate(
+    { _id: ObjectId(userId) },
+    createOrder(type, "isGoingTo", venue.id),
+    { new: true }
+  )
+  .populate("isGoingTo")
+  .exec((err, user) => {
+    if(err) {
+      return cb(err);
+    }
+    Venue.findOne({ venueId: venue.id }, (err, foundVenue) => {
+      if(err) {
+        return cb(err);
+      }
+      if(foundVenue) {
+        switch(type) {
+          case "add":
+            foundVenue.isGoing.push(ObjectId(userId));
+            break;
+
+          case "remove":
+            foundVenue.isGoing = foundVenue.isGoind.filter((id) => {
+              return id !== userId;
+            });
+            break;
+        }
+        if(foundVenue.isGoing.length === 0) {
+          foundVenue.remove((err) => {
+            return cb(err, user);
+          });
+        }
+        else {
+          foundVenue.save((err) => {
+            cb(err, user);
+          });
+        }
+      }
+      else {
+        var newVenue = new Venue({
+          venueId: venue.id,
+          image_url: venue.image_url,
+          isGoing: [ObjectId(userId)]
+        });
+
+        newVenue.save((err) => {
+          cb(err, user);
+        });
+      }
+    });
+  });
 };
 
 module.exports = mongoose.model("user", User);

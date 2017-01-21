@@ -1,18 +1,9 @@
 const Account = require("../../models/user");
 const normalize = require("../../models/utils/normalize");
+const ensureAuth = require("./utils/ensure_auth");
 const passport = require("passport");
 const express = require("express");
 const router = express.Router();
-
-function ensureAuth(req, res, next) {
-  if(req.isAuthenticated()) {
-    return next();
-  }
-  res.status(401).json({
-    statusCode: 401,
-    message: "unauthorized access to api"
-  });
-}
 
 // Todo:
 // -----
@@ -32,18 +23,27 @@ router.post("/api/user/register", (req, res) => {
       return;
     }
     passport.authenticate("local")(req, res, () => {
-      res.json(normalize(user));
+      res.json(normalize("user", user));
     });
   });
 });
 
 router.post("/api/user/login", passport.authenticate("local"), (req, res) => {
-  res.json(normalize(req.user));
+  res.json(normalize("user", req.user, "isGoingTo"));
 });
 
 router.post("/api/user/logout", ensureAuth, (req, res) => {
   req.logout();
   res.json({ success: true });
+});
+
+router.post("/api/user/editVenue", ensureAuth, (req, res) => {
+  Account.goToVenueOrRemove(req.body.type, req.user._id, req.body.venue, (err, user) => {
+    if(err) {
+      return res.status(500).json({ statusCode: 500, error: err });
+    }
+    res.json(normalize("user", user, "isGoingTo"));
+  });
 });
 
 module.exports = function() {
