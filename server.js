@@ -8,9 +8,12 @@ const session = require("express-session");
 const bodyParser = require("body-parser");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
+
+const venue = require("./app/api/venue.js");
 const user = require("./app/api/user.js");
 const yelp = require("./app/api/yelp.js");
 const routes = require("./app/routes.js");
+
 const MongoStore = require("connect-mongo")(session);
 const mongoose = require("mongoose");
 
@@ -47,6 +50,7 @@ passport.use(new LocalStrategy({ usernameField: "email" }, Account.authenticate(
 passport.serializeUser(Account.serializeUser());
 passport.deserializeUser(Account.deserializeUser());
 
+app.use(venue());
 app.use(user());
 app.use(yelp());
 app.use(routes());
