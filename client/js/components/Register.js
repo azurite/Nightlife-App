@@ -93,7 +93,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         return dispatch(actions.registerError({ message: "password must be at least 6 characters long" }));
       }
       dispatch(actions.register());
-      Api.real.registerUser(info, (err, user) => {
+      Api.registerUser(info, (err, user) => {
         if(err) {
           return dispatch(actions.registerError(err));
         }

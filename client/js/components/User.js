@@ -65,7 +65,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     logout: function() {
       dispatch(actions.logout());
-      Api.real.logoutUser((err) => {
+      Api.logoutUser((err) => {
         if(err) {
           return dispatch(actions.logoutError(err));
         }

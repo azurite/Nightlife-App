@@ -109,7 +109,7 @@ const VenueDetail = React.createClass({
               {
                 isLoggedIn &&
                 users.data.map((u, i) => {
-                  return <User key={i} url={u.image_url} name={u.username}/>;
+                  return <User key={i} url={u.image_url} name={u.name}/>;
                 })
               }
             </Col>
@@ -160,7 +160,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         id: ownProps.params.id
       };
 
-      Api.real.fetchBusiness(opt, (err, venue) => {
+      Api.fetchBusiness(opt, (err, venue) => {
         if(err) {
           return dispatch(actions.venueError(err));
         }
@@ -175,7 +175,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       var info = {
         id: id
       };
-      Api.real.fetchIsGoing(info, (err, users) => {
+      Api.fetchIsGoing(info, (err, users) => {
         if(err) {
           return dispatch(actions.isGoingError(err));
         }
@@ -194,7 +194,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         }
       };
 
-      Api.real.addOrRemoveVenue(info, function(err, user) {
+      Api.addOrRemoveVenue(info, function(err, user) {
         if(err) {
           return dispatch(actions.goToVenueOrRemoveError(type, err));
         }
