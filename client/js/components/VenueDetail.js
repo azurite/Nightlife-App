@@ -16,20 +16,23 @@ const VenueDetail = React.createClass({
     isAlsoGoing: React.PropTypes.object.isRequired,
     userIsGoing: React.PropTypes.bool.isRequired,
     fetchVenueAndIsGoing: React.PropTypes.func.isRequired,
-    fetchIsGoing: React.PropTypes.func.isRequired
+    fetchIsGoing: React.PropTypes.func.isRequired,
+    goToVenueOrRemove: React.PropTypes.func.isRequired,
+    addRemove: React.PropTypes.object.isRequired
   },
   componentDidMount: function() {
+    let venue = this.props.venue.data[0];
     if(this.props.venue.error) {
       //server already didn't find it. No need to search again
       return;
     }
-    if(!this.props.venue.data[0]) {
+    if(!venue) {
       //scenario 3)
       this.props.fetchVenueAndIsGoing(this.props.isLoggedIn);
       return;
     }
-    if(this.props.isLoggedIn) {
-      this.props.fetchIsGoing();
+    if(this.props.isLoggedIn && venue) {
+      this.props.fetchIsGoing(venue.id);
     }
   },
   render: function() {
@@ -61,8 +64,18 @@ const VenueDetail = React.createClass({
                   </Col>
                   <Col sm={8} xs={12} className="v-center-title">
                     <h1 className="title-main">{vData.name}</h1>
-                    <Button className="btn-red btn-edge border-white align-right">
-                      {userIsGoing ? "Remove" : "Go there tonight"}
+                    <Button
+                      className="btn-red btn-edge border-white align-right"
+                      disabled={this.props.addRemove.isPending}
+                      onClick={
+                        !isLoggedIn ? () => { return false; } :
+                        this.props.goToVenueOrRemove.bind(this, userIsGoing ? "remove" : "add", vData)
+                      }
+                      >
+                      {
+                        (this.props.addRemove.isPending && "Loading...") ||
+                        (userIsGoing ? "Remove" : "Go there tonight")
+                      }
                     </Button>
                   </Col>
                 </Row>
@@ -133,13 +146,14 @@ const mapStateToProps = (state, ownProps) => {
     isLoggedIn: !!state.user,
     userIsGoing: !!(state.user && state.user.isGoingTo.find((v) => {
       return v.id === ownProps.params.id;
-    }))
+    })),
+    addRemove: state.location_detail.add_remove
   };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    fetchVenueAndIsGoing: function(isLoggedIn) {
+    fetchVenueAndIsGoing: function(isLoggedIn, id) {
       dispatch(actions.fetchVenueData());
 
       var opt = {
@@ -152,17 +166,39 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         }
         dispatch(actions.venueSuccess(venue));
         if(isLoggedIn && venue) {
-          this.fetchIsGoing();
+          this.fetchIsGoing(id);
         }
       });
     },
-    fetchIsGoing: function() {
+    fetchIsGoing: function(id) {
       dispatch(actions.fetchIsGoing());
-      Api.pretendFetchIsGoing((err, users) => {
+      var info = {
+        id: id
+      };
+      Api.real.fetchIsGoing(info, (err, users) => {
         if(err) {
           return dispatch(actions.isGoingError(err));
         }
         dispatch(actions.isGoingSuccess(users));
+      });
+    },
+    goToVenueOrRemove: function(type, venue) {
+      dispatch(actions.goToVenueOrRemove());
+
+      var info = {
+        type: type,
+        venue: {
+          id: venue.id,
+          name: venue.name,
+          image_url: venue.image_url
+        }
+      };
+
+      Api.real.addOrRemoveVenue(info, function(err, user) {
+        if(err) {
+          return dispatch(actions.goToVenueOrRemoveError(type, err));
+        }
+        dispatch(actions.goToVenueOrRemoveSuccess(type, user));
       });
     }
   };

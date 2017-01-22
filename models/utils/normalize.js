@@ -18,7 +18,8 @@ module.exports = function normalize(type, schema, populatedField) {
     case "isGoingTo":
       norm.isGoingTo = schema.isGoingTo.map((venue) => {
         return {
-          id: venue.venueId,
+          id: venue.id,
+          name: venue.name,
           image_url: venue.image_url
         };
       });
@@ -27,12 +28,13 @@ module.exports = function normalize(type, schema, populatedField) {
     case "isGoing":
       norm.isGoing = schema.isGoing.map((user) => {
         return {
+          id: user._id.toString(16),
           name: user.local.name,
           image_url: user.local.image_url
         };
       });
       break;
   }
-  
+
   return norm;
 };

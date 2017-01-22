@@ -12,6 +12,10 @@ const _request = function() {
     return qs;
   };
 
+  const attachMessage = function(err) {
+    err.message = err.message || "internal server error";
+  };
+
   return {
     fetchYelp: function fetchYelp(opt, cb) {
       Axios.get("/api/yelp/search" + stringify(opt))
@@ -22,7 +26,7 @@ const _request = function() {
         cb(null, res.data.businesses);
       })
       .catch(function(err) {
-        err.message = err.message || "internal server error";
+        attachMessage(err);
         cb(err);
       });
     },
@@ -35,7 +39,7 @@ const _request = function() {
         cb(null, res.data);
       })
       .catch(function(err) {
-        err.message = err.message || "internal server error";
+        attachMessage(err);
         cb(err);
       });
     },
@@ -48,7 +52,7 @@ const _request = function() {
         cb(null, res.data);
       })
       .catch((err) => {
-        err.message = err.message || "internal server error";
+        attachMessage(err);
         cb(err);
       });
     },
@@ -62,7 +66,7 @@ const _request = function() {
           cb({ message: "wrong username or password" });
         }
         else {
-          err.message = err.message || "internal server error";
+          attachMessage(err);
           cb(err);
         }
       });
@@ -73,7 +77,35 @@ const _request = function() {
         cb(null, res.data);
       })
       .catch((err) => {
-        err.message = err.message || "internal server error";
+        attachMessage(err);
+        cb(err);
+      });
+    },
+    addOrRemoveVenue: function addOrRemoveVenue(opt, cb) {
+      Axios.post("/api/user/editVenue", opt)
+      .then((res) => {
+        if(res.data.statusCode === 500) {
+          attachMessage(res.data.error);
+          return cb(res.data.error);
+        }
+        cb(null, res.data);
+      })
+      .catch((err) => {
+        attachMessage(err);
+        cb(err);
+      });
+    },
+    fetchIsGoing: function fetchIsGoing(opt, cb) {
+      Axios.get("/api/venue/isGoing" + stringify(opt))
+      .then((res) => {
+        if(res.data.statusCode > 200) {
+          attachMessage(res.data.error);
+          return cb(res.data.error);
+        }
+        cb(null, res.data);
+      })
+      .catch((err) => {
+        attachMessage(err);
         cb(err);
       });
     }

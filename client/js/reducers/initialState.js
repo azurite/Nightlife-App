@@ -8,7 +8,8 @@ const initialState = {
   },
   location_detail: {
     venue: Req.init(),
-    is_also_going: Req.init()
+    is_also_going: Req.init(),
+    add_remove: Req.init()
   },
   login: {
     email: "",

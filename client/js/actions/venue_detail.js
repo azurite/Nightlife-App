@@ -34,5 +34,24 @@ module.exports = {
       type: types.IS_GOING_ERROR,
       error: err
     };
+  },
+  goToVenueOrRemove: function() {
+    return {
+      type: types.GOTO_OR_REMOVE
+    };
+  },
+  goToVenueOrRemoveSuccess: function(method, user) {
+    return {
+      type: types.GOTO_OR_REMOVE_SUCCESS,
+      method: method,
+      user: user
+    };
+  },
+  goToVenueOrRemoveError: function(method, err) {
+    return {
+      type: types.GOTO_OR_REMOVE_ERROR,
+      method: method,
+      error: err
+    };
   }
 };
