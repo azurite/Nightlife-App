@@ -19,7 +19,7 @@ const createOrder = function(type, field, value) {
       break;
 
     case "remove":
-      order.$pull = { [field]: value };
+      order.$pull = { [field]: { id: value.id } };
       break;
   }
 
@@ -64,7 +64,7 @@ const User = new mongoose.Schema({
     token: { type: String, default: "" },
     profile: { type: Object, default: {} }
   },
-  isGoingTo: [{ type: mongoose.Schema.Types.ObjectId, ref: "venue" }]
+  isGoingTo: [{ id: String, name: String, image_url: String }]
 });
 
 // PRE: password to set and callback function
@@ -198,7 +198,7 @@ User.statics.deserializeUser = function() {
 User.statics.goToVenueOrRemove = function(type, userId, venue, cb) {
   this.findOneAndUpdate(
     { _id: ObjectId(userId) },
-    createOrder(type, "isGoingTo", venue.id),
+    createOrder(type, "isGoingTo", venue),
     { new: true }
   )
   .populate("isGoingTo")
@@ -217,7 +217,7 @@ User.statics.goToVenueOrRemove = function(type, userId, venue, cb) {
             break;
 
           case "remove":
-            foundVenue.isGoing = foundVenue.isGoind.filter((id) => {
+            foundVenue.isGoing = foundVenue.isGoing.filter((id) => {
               return id !== userId;
             });
             break;
@@ -236,6 +236,7 @@ User.statics.goToVenueOrRemove = function(type, userId, venue, cb) {
       else {
         var newVenue = new Venue({
           venueId: venue.id,
+          name: venue.name,
           image_url: venue.image_url,
           isGoing: [ObjectId(userId)]
         });

@@ -9,13 +9,16 @@ const router = express.Router();
 
 router.get("/api/venue/isGoing", ensureAuth, (req, res) => {
   var venueId = qs.parse(url.parse(req.url).query).id;
-  Venue.find({ venueId: venueId })
+  Venue.findOne({ venueId: venueId })
     .populate("isGoing")
     .exec((err, venue) => {
       if(err) {
         return res.status(500).json({ statusCode: 500, error: err });
       }
-      res.json(normalize("venue", venue, "isGoing").isGoing);
+      if(venue) {
+        return res.json(normalize("venue", venue, "isGoing").isGoing);
+      }
+      res.status(400).json({ statusCode: 400, error: { message: "venue not found" } });
     });
 });
 
