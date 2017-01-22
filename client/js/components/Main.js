@@ -108,7 +108,7 @@ const mapDispatchToProps = (dispatch) => {
         location: value
       };
 
-      Api.real.fetchYelp(opt, (err, data) => {
+      Api.fetchYelp(opt, (err, data) => {
         if(err) {
           return dispatch(actions.submitFailure(err, paginate));
         }

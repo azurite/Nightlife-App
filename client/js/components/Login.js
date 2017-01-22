@@ -95,7 +95,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         return;
       }
       dispatch(actions.submitLogin());
-      Api.real.loginUser(info, (err, user) => {
+      Api.loginUser(info, (err, user) => {
         if(err) {
           return dispatch(actions.loginError(err));
         }

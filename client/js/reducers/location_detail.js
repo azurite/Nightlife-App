@@ -47,7 +47,7 @@ const location_detail = function(state, action) {
           data: action.method === "add" ?
           curr.concat({
             id: action.user.id,
-            username: action.user.username,
+            name: action.user.username,
             image_url: action.user.image_url
           }) :
           curr.filter((user) => {

@@ -1,6 +1,6 @@
 const Axios = require("axios");
 
-const _request = function() {
+const request = function() {
 
   const stringify = function(q) {
     var qs = "?", keys = Object.keys(q);
@@ -112,13 +112,4 @@ const _request = function() {
   };
 };
 
-const request = {
-  pretendFetchIsGoing: function pretendFetchIsGoing(cb) {
-    require.ensure([], function(require) {
-      cb(null, require("./dev/sample_is_going_to.js"));
-    });
-  },
-  real: _request()
-};
-
-module.exports = request;
+module.exports = request();

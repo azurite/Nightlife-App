@@ -7,8 +7,6 @@ const router = express.Router();
 
 // Todo:
 // -----
-// go to venue
-// remove from venue
 // delete account
 
 router.post("/api/user/register", (req, res) => {
