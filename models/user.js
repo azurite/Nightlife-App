@@ -218,7 +218,7 @@ User.statics.goToVenueOrRemove = function(type, userId, venue, cb) {
 
           case "remove":
             foundVenue.isGoing = foundVenue.isGoing.filter((id) => {
-              return id !== userId;
+              return !id.equals(userId);
             });
             break;
         }

@@ -4,7 +4,7 @@ module.exports = function normalize(type, schema, populatedField) {
   switch(type) {
     case "user":
       norm.id = schema._id.toString(16);
-      norm.username = schema.local.name;
+      norm.name = schema.local.name;
       norm.image_url = schema.local.image_url;
       break;
 

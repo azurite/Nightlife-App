@@ -12,9 +12,9 @@ const App = React.createClass({
     if(this.props.user) {
       return (
         <Nav pullRight>
-          <LinkContainer to={"/user/" + this.props.user.username}>
+          <LinkContainer to={"/user/" + this.props.user.name}>
             <NavItem className="menu-item">
-              {this.props.user.username}
+              {this.props.user.name}
             </NavItem>
           </LinkContainer>
         </Nav>

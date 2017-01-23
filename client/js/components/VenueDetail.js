@@ -10,6 +10,7 @@ const Req = require("../reducers/redux-request");
 
 const VenueDetail = React.createClass({
   propTypes: {
+    router: React.PropTypes.object,
     params: React.PropTypes.object,
     venue: React.PropTypes.object.isRequired,
     isLoggedIn: React.PropTypes.bool.isRequired,
@@ -68,7 +69,7 @@ const VenueDetail = React.createClass({
                       className="btn-red btn-edge border-white align-right"
                       disabled={this.props.addRemove.isPending}
                       onClick={
-                        !isLoggedIn ? () => { return false; } :
+                        !isLoggedIn ? () => { return this.props.router.push("/login"); } :
                         this.props.goToVenueOrRemove.bind(this, userIsGoing ? "remove" : "add", vData)
                       }
                       >
@@ -104,7 +105,13 @@ const VenueDetail = React.createClass({
               {users.isPending && <Loading size="fa-2x" color="red"/>}
               {
                 isLoggedIn && users.success &&
-                <h3 className="text-center user-list-title">{users.data.length} people are going there tonight</h3>
+                <h3 className="text-center user-list-title">
+                  {
+                    users.data.length === 0 ? "No one is going there tonight" :
+                    users.data.length === 1 ? "Someone is going there tonight" :
+                    users.data.length + "people are going there tonight"
+                  }
+                </h3>
               }
               {
                 isLoggedIn &&

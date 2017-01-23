@@ -18,7 +18,7 @@ router.get("/api/venue/isGoing", ensureAuth, (req, res) => {
       if(venue) {
         return res.json(normalize("venue", venue, "isGoing").isGoing);
       }
-      res.status(400).json({ statusCode: 400, error: { message: "venue not found" } });
+      res.json([]);
     });
 });
 
