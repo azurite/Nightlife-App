@@ -24,7 +24,7 @@ const User = React.createClass({
                 <Image src={user.image_url} circle responsive/>
               </Col>
               <Col sm={8} xs={12} className="user-center-title">
-                <h1 className="title-main">{user.username}</h1>
+                <h1 className="title-main">{user.name}</h1>
                 <Button className="btn-red btn-edge border-white" disabled={logout.isPending} onClick={this.props.logout}>
                   {logout.isPending ? "Loading..." : "Logout"}
                 </Button>
@@ -43,7 +43,7 @@ const User = React.createClass({
             {user.isGoingTo && user.isGoingTo.map((v) => {
               return (
                 <Link key={v.id} to={"/venue/" + v.id}>
-                  <Venue url={v.image_url} name={v.name} is_going/>
+                  <Venue url={v.image_url} name={v.name}/>
                 </Link>
               );
             })}

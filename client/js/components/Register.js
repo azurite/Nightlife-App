@@ -98,7 +98,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
           return dispatch(actions.registerError(err));
         }
         dispatch(actions.registerSuccess(user));
-        ownProps.router.push("/user/" + user.username);
+        ownProps.router.push("/user/" + user.name);
 
         dispatch(actions.updateRegisterInput("fullName", ""));
         dispatch(actions.updateRegisterInput("email", ""));

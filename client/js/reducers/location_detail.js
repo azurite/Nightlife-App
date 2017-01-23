@@ -42,18 +42,17 @@ const location_detail = function(state, action) {
       var curr = state.is_also_going.data;
       return Object.assign({}, state, {
         add_remove: Req.done(state.add_remove, [], false),
-        is_also_going: {
-          ...state.is_also_going,
+        is_also_going: Object.assign({}, state.is_also_going, {
           data: action.method === "add" ?
           curr.concat({
             id: action.user.id,
-            name: action.user.username,
+            name: action.user.name,
             image_url: action.user.image_url
           }) :
           curr.filter((user) => {
             return user.id !== action.user.id;
           })
-        }
+        })
       });
 
     case types.GOTO_OR_REMOVE_ERROR:

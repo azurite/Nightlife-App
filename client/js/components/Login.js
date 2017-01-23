@@ -97,10 +97,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch(actions.submitLogin());
       Api.loginUser(info, (err, user) => {
         if(err) {
+          dispatch(actions.updateLoginInput("password", ""));
           return dispatch(actions.loginError(err));
         }
         dispatch(actions.loginSuccess(user));
-        ownProps.router.push("/user/" + user.username);
+        ownProps.router.push("/user/" + user.name);
 
         dispatch(actions.updateLoginInput("email", ""));
         dispatch(actions.updateLoginInput("password", ""));
