@@ -60,6 +60,12 @@ const location_detail = function(state, action) {
         add_remove: Req.fail(state.add_remove, action.error, false)
       });
 
+    case types.RESET_ON_LEAVE:
+      return Object.assign({}, state, {
+        venue: Req.init(),
+        is_also_going: Req.init()
+      });
+
     default:
       return state;
   }

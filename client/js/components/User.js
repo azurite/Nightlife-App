@@ -39,7 +39,12 @@ const User = React.createClass({
         </Row>
         <Row className="last-row">
           <Col sm={8} xs={10} smOffset={2} xsOffset={1} className="is-going-list">
-            <h3 className="text-center">Venues you are currently going to</h3>
+            {
+              user.isGoingTo &&
+              <h3 className="text-center">
+                {user.isGoingTo.length === 0 ? "You are not going anywhere tonight" : "Venues you are currently going to"}
+              </h3>
+            }
             {user.isGoingTo && user.isGoingTo.map((v) => {
               return (
                 <Link key={v.id} to={"/venue/" + v.id}>

@@ -39,7 +39,8 @@ app.set("views", path.join(process.cwd(), "client"));
 
 app.use(logger());
 app.use(express.static(path.join(process.cwd(), "build", "client")));
-app.use(favicon(path.join(process.cwd(), "build", "client", "media", "favicon.ico")));
+app.use(express.static(path.join(process.cwd(), "client")));
+app.use(favicon(path.join(process.cwd(), "client", "media", "favicon.ico")));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(session(sessionOptions));

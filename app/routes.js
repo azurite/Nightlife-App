@@ -3,6 +3,7 @@ const { createStore } = require("redux");
 const { Provider } = require("react-redux");
 const { renderToString } = require("react-dom/server");
 const { match, RouterContext } = require("react-router");
+const normalize = require("../models/utils/normalize");
 const Yelp = require("yelp");
 
 var yelp = new Yelp({
@@ -24,7 +25,10 @@ const assets = require("./serve_bundles.js")({
 
 const reducer = require("../client/js/reducers/root-reducer");
 const initialState = require("../client/js/reducers/initialState");
-const actions = require("../client/js/actions/venue_detail");
+const actions = Object.assign({},
+  require("../client/js/actions/venue_detail"),
+  require("../client/js/actions/login")
+);
 
 const express = require("express");
 const router = express.Router();
@@ -32,6 +36,13 @@ const router = express.Router();
 router.get("*", (req, res, next) => {
   const store = createStore(reducer, initialState);
   req.reduxStore = store;
+
+  if(req.isAuthenticated()) {
+    req.reduxStore.dispatch(
+      actions.loginSuccess(normalize("user", req.user, "isGoingTo"))
+    );
+  }
+  
   next();
 });
 
