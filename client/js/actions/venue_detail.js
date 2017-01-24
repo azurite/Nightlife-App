@@ -53,5 +53,10 @@ module.exports = {
       method: method,
       error: err
     };
+  },
+  resetOnLeave: function() {
+    return {
+      type: types.RESET_ON_LEAVE,
+    };
   }
 };

@@ -29,7 +29,10 @@ const VenueDetail = React.createClass({
     }
     if(!venue) {
       //scenario 3)
-      this.props.fetchVenueAndIsGoing(this.props.isLoggedIn);
+      this.props.fetchVenueAndIsGoing(
+        this.props.isLoggedIn,
+        this.props.params.id
+      );
       return;
     }
     if(this.props.isLoggedIn && venue) {
@@ -104,7 +107,7 @@ const VenueDetail = React.createClass({
               }
               {users.isPending && <Loading size="fa-2x" color="red"/>}
               {
-                isLoggedIn && users.success &&
+                (isLoggedIn && users.success) &&
                 <h3 className="text-center user-list-title">
                   {
                     users.data.length === 0 ? "No one is going there tonight" :
@@ -158,13 +161,13 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch) => {
   return {
     fetchVenueAndIsGoing: function(isLoggedIn, id) {
       dispatch(actions.fetchVenueData());
 
       var opt = {
-        id: ownProps.params.id
+        id: id
       };
 
       Api.fetchBusiness(opt, (err, venue) => {
