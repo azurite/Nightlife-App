@@ -1,7 +1,6 @@
 node_modules
 DB
-build/client/*.*
-build/server
+build
 config/.env
 tests
 client/js/dev
