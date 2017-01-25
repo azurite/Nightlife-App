@@ -57,12 +57,16 @@ const User = React.createClass({
           <Col md={4} sm={8} xs={10} mdOffset={4} smOffset={2} xsOffset={1}>
             <div className="social-login">
               <h3 className="text-center login-title">Login with social media</h3>
-              <Button className="btn-red" block>
-                Login with Twitter <i className="fa fa-twitter"></i>
-              </Button>
-              <Button className="btn-red" block>
-                Login with Github <i className="fa fa-github"></i>
-              </Button>
+              <a href="/auth/twitter">
+                <Button className="btn-red" block>
+                  Login with Twitter <i className="fa fa-twitter"></i>
+                </Button>
+              </a>
+              <a href="/auth/github">
+                <Button className="btn-red" block>
+                  Login with Github <i className="fa fa-github"></i>
+                </Button>
+              </a>
             </div>
           </Col>
         </Row>

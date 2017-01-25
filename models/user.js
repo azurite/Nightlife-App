@@ -50,21 +50,22 @@ const User = new mongoose.Schema({
   local: {
     name: String,
     image_url: { type: String, default: "/media/dummy-profile-pic.png" },
-    email: { type: String, unique: true },
+    email: { type: String, unique: true, sparse: true },
     hash: { type: String, select: false },
     salt: { type: String, select: false }
   },
   twitter: {
     id: { type: String, default: "" },
-    token: { type: String, default: "" },
-    profile: { type: Object, default: {} }
+    name: { type: String, default: "" },
+    image_url: { type: String, default: "/media/dummy-profile-pic.png" }
   },
-  GitHub: {
+  github: {
     id: { type: String, default: "" },
-    token: { type: String, default: "" },
-    profile: { type: Object, default: {} }
+    name: { type: String, default: "" },
+    image_url: { type: String, default: "/media/dummy-profile-pic.png" }
   },
-  isGoingTo: [{ id: String, name: String, image_url: String }]
+  isGoingTo: [{ id: String, name: String, image_url: String }],
+  loginMethod: String,
 });
 
 // PRE: password to set and callback function
@@ -171,6 +172,101 @@ User.statics.register = function(user, password, cb) {
       });
     });
   });
+};
+
+// PRE: loginMethod of social media (eg. "twitter" or "github")
+// POST: authenticated user from database (either found or created)
+User.statics.socialAuth = function(loginMethod) {
+  if(typeof loginMethod === "undefined") {
+    throw new TypeError("User.socialAuth() loginMethod not specified");
+  }
+
+  var self = this;
+
+  /*
+   * The createUpdate() and createUser() functions were build with the assumption that
+   * every social media host stores it's user information differently and therefore
+   * I had to make sure to grab each piece of information from it's own place.
+   * Surprisingly twitter and github store their userinformation in the exact same format
+   * and that kind of makes these functions obsolete. However I decieded to keep them since
+   * the format can change or I want to add further login methods.
+   */
+
+  const createUpdate = function(method, profile) {
+    var update = {};
+
+    switch(method) {
+      case "twitter":
+        update.$set = {
+          "twitter.name": profile.displayName,
+          "twitter.image_url": profile.photos[0].value.replace("_normal", "")
+        };
+        break;
+
+      case "github":
+        update.$set = {
+          "github.name": profile.displayName,
+          "github.image_url": profile.photos[0].value
+        };
+        break;
+
+      default:
+        throw new TypeError("createUpdate() unknown method: " + method);
+    }
+
+    return update;
+  };
+
+  const createUser = function(method, Model, profile) {
+    switch(method) {
+      case "twitter":
+        return new Model({
+          twitter: {
+            id: profile.id,
+            name: profile.displayName,
+            image_url: profile.photos[0].value.replace("_normal", "")
+          },
+          loginMethod: method
+        });
+
+      case "github":
+        return new Model({
+          github: {
+            id: profile.id,
+            name: profile.displayName,
+            image_url: profile.photos[0].value
+          },
+          loginMethod: method
+        });
+
+      default:
+        throw new TypeError("createUser() unknown loginMethod: " + method);
+    }
+  };
+
+  return function(token, tokenSecret, profile, done) {
+    self.findOneAndUpdate(
+      { [loginMethod + ".id"]: profile.id },
+      createUpdate(loginMethod, profile),
+      { new: true },
+      (err, user) => {
+        if(err) {
+          return done(err);
+        }
+        if(!user) {
+          var newUser = createUser(loginMethod, self, profile);
+          newUser.save((err) => {
+            if(err) {
+              return done(err);
+            }
+            done(null, newUser);
+          });
+        }
+        else {
+          done(null, user);
+        }
+      });
+  };
 };
 
 // PRE: user model and callback function

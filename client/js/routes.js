@@ -8,6 +8,7 @@ const Login = require("./components/Login");
 const Register = require("./components/Register");
 const VenueDetail = require("./components/VenueDetail");
 const User = require("./components/User");
+const Social = require("./components/Social");
 
 const routes = function(store) {
 
@@ -15,7 +16,7 @@ const routes = function(store) {
     const state = store.getState();
 
     if(state.user) {
-      replaceState({ pathname: "/user/" + state.user.username });
+      replaceState({ pathname: "/user/" + state.user.name });
     }
   };
 
@@ -23,6 +24,17 @@ const routes = function(store) {
     const state = store.getState();
 
     if(state.user === null) {
+      replaceState({ pathname: "/login" });
+    }
+  };
+
+  const checkOAuth = function(nextState, replaceState) {
+    const state = store.getState();
+
+    if(state.user && state.user.loginMethod === nextState.params.social) {
+      replaceState({ pathname: "/user/" + state.user.name });
+    }
+    else {
       replaceState({ pathname: "/login" });
     }
   };
@@ -38,6 +50,7 @@ const routes = function(store) {
       <Route path="/register" component={Register} onEnter={delegateAuth}/>
       <Route path="/venue/:id" component={VenueDetail} OnLeave={reset}/>
       <Route path="/user/:username" component={User} onEnter={requireAuth}/>
+      <Route path="/auth/:social/callback" component={Social} onEnter={checkOAuth}/>
     </Route>
   );
 };

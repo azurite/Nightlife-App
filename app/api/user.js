@@ -15,13 +15,13 @@ router.post("/api/user/register", (req, res) => {
     email: req.body.email,
   };
 
-  Account.register({ local: local }, req.body.password, (err, user) => {
+  Account.register({ local: local, loginMethod: "local" }, req.body.password, (err, user) => {
     if(err) {
       res.json({ statusCode: 500, error: { message: err.message } });
       return;
     }
     passport.authenticate("local")(req, res, () => {
-      res.json(normalize("user", user));
+      res.json(normalize("user", user, "isGoingTo"));
     });
   });
 });
@@ -32,6 +32,7 @@ router.post("/api/user/login", passport.authenticate("local"), (req, res) => {
 
 router.post("/api/user/logout", ensureAuth, (req, res) => {
   req.logout();
+  req.session.destroy();
   res.json({ success: true });
 });
 
