@@ -4,8 +4,8 @@ module.exports = function normalize(type, schema, populatedField) {
   switch(type) {
     case "user":
       norm.id = schema._id.toString(16);
-      norm.name = schema.local.name;
-      norm.image_url = schema.local.image_url;
+      norm.name = schema[schema.loginMethod].name;
+      norm.image_url = schema[schema.loginMethod].image_url;
       break;
 
     case "venue":
@@ -29,8 +29,8 @@ module.exports = function normalize(type, schema, populatedField) {
       norm.isGoing = schema.isGoing.map((user) => {
         return {
           id: user._id.toString(16),
-          name: user.local.name,
-          image_url: user.local.image_url
+          name: user[user.loginMethod].name,
+          image_url: user[user.loginMethod].image_url
         };
       });
       break;

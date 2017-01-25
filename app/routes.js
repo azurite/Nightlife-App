@@ -3,6 +3,7 @@ const { createStore } = require("redux");
 const { Provider } = require("react-redux");
 const { renderToString } = require("react-dom/server");
 const { match, RouterContext } = require("react-router");
+const passport = require("passport");
 const normalize = require("../models/utils/normalize");
 const Yelp = require("yelp");
 
@@ -36,13 +37,34 @@ const router = express.Router();
 router.get("*", (req, res, next) => {
   const store = createStore(reducer, initialState);
   req.reduxStore = store;
+  next();
+});
 
+router.get("/auth/twitter", passport.authenticate("twitter"));
+
+router.get("/auth/twitter/callback",
+  passport.authenticate("twitter", { failureRedirect: "/login" }),
+  (req, res, next) => {
+    next();
+  }
+);
+
+router.get("/auth/github", passport.authenticate("github"));
+
+router.get("/auth/github/callback",
+  passport.authenticate("github", { failureRedirect: "/login" }),
+  (req, res, next) => {
+    next();
+  }
+);
+
+router.get("*", (req, res, next) => {
   if(req.isAuthenticated()) {
     req.reduxStore.dispatch(
       actions.loginSuccess(normalize("user", req.user, "isGoingTo"))
     );
   }
-  
+
   next();
 });
 
