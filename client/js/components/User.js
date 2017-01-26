@@ -3,18 +3,32 @@ const { connect } = require("react-redux");
 const { Link } = require("react-router");
 const { Grid, Row, Col, Button, Image } = require("react-bootstrap");
 const Venue = require("./Display");
+const Confirm = require("./Modal");
 const Api = require("../request");
-const actions = require("../actions/user");
+const actions = Object.assign(
+  require("../actions/user"),
+  require("../actions/delete")
+);
+
+const messages = {
+  title: "Are you sure?",
+  body: "Deleting your account can't be undone.\nYour account will be gone forever (a very long time)"
+};
 
 const User = React.createClass({
   propTypes: {
     user: React.PropTypes.object.isRequired,
     logout: React.PropTypes.func.isRequired,
-    logoutStats: React.PropTypes.object.isRequired
+    logoutStats: React.PropTypes.object.isRequired,
+    modalOpen: React.PropTypes.bool.isRequired,
+    deleteStatus: React.PropTypes.object.isRequired,
+    delete: React.PropTypes.func.isRequired,
+    toggleModal: React.PropTypes.func.isRequired
   },
   render: function() {
     let user = this.props.user;
     let logout = this.props.logoutStats;
+    let deleteStatus = this.props.deleteStatus;
     return (
       <Grid fluid>
         <Row>
@@ -28,7 +42,16 @@ const User = React.createClass({
                 <Button className="btn-red btn-edge border-white" disabled={logout.isPending} onClick={this.props.logout}>
                   {logout.isPending ? "Loading..." : "Logout"}
                 </Button>
-                <Button className="btn-red btn-edge border-white">Delete Account</Button>
+                <Button className="btn-red btn-edge border-white" disabled={deleteStatus.isPending} onClick={this.props.toggleModal}>
+                  {deleteStatus.isPending ? "Loading..." : "Delete Account"}
+                </Button>
+                <Confirm
+                  visible={this.props.modalOpen}
+                  title={messages.title}
+                  body={messages.body}
+                  confirm={this.props.delete}
+                  cancel={this.props.toggleModal}
+                />
                 {
                   logout.error &&
                   <span className="err-msg">{logout.error.message}</span>
@@ -62,7 +85,9 @@ const User = React.createClass({
 const mapStateToProps = (state) => {
   return {
     user: state.user || {},
-    logoutStats: state.logout
+    logoutStats: state.logout,
+    modalOpen: state.delete.modalOpen,
+    deleteStatus: state.delete.status
   };
 };
 
@@ -77,6 +102,21 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         dispatch(actions.logoutSuccess());
         ownProps.router.push("/login");
       });
+    },
+    delete: function() {
+      dispatch(actions.toggleModal());
+      dispatch(actions.deleteAccount());
+
+      Api.deleteAccount((err) => {
+        if(err) {
+          return dispatch(actions.deleteAccountError(err));
+        }
+        dispatch(actions.deleteAccountSuccess());
+        ownProps.router.push("/");
+      });
+    },
+    toggleModal: function() {
+      dispatch(actions.toggleModal());
     }
   };
 };

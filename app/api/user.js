@@ -36,6 +36,17 @@ router.post("/api/user/logout", ensureAuth, (req, res) => {
   res.json({ success: true });
 });
 
+router.delete("/api/user/deleteAccount", ensureAuth, (req, res) => {
+  Account.removeUser(req.user._id, (err) => {
+    if(err) {
+      return res.status(500).json({ statusCode: 500, error: err });
+    }
+    req.logout();
+    req.session.destroy();
+    res.json({ success: true });
+  });
+});
+
 router.post("/api/user/editVenue", ensureAuth, (req, res) => {
   Account.goToVenueOrRemove(req.body.type, req.user._id, req.body.venue, (err, user) => {
     if(err) {

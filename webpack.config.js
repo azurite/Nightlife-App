@@ -78,7 +78,7 @@ switch(process.env.npm_lifecycle_event) {
       parts.minify(),
       parts.pugLoader({ include: PATHS.client }),
       parts.babelLoader({ include: PATHS.app }),
-      parts.extracCSS({ include: PATHS.style, chunkhash: true })
+      parts.extractCSS({ include: PATHS.style, chunkhash: true })
     );
     break;
 

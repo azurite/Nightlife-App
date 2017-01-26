@@ -4,6 +4,7 @@ const login = require("./login");
 const register = require("./register");
 const user = require("./user");
 const logout = require("./logout");
+const Delete = require("./delete");
 
 const root_reducer = function(state, action) {
   return {
@@ -12,7 +13,8 @@ const root_reducer = function(state, action) {
     login: login(state.login, action),
     register: register(state.register, action),
     user: user(state.user, action),
-    logout: logout(state.logout, action)
+    logout: logout(state.logout, action),
+    delete: Delete(state.delete, action)
   };
 };
 

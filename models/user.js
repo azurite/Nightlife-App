@@ -345,4 +345,25 @@ User.statics.goToVenueOrRemove = function(type, userId, venue, cb) {
   });
 };
 
+User.statics.removeUser = function(id, cb) {
+  this.findById(id, (err, user) => {
+    if(err) {
+      return cb(err);
+    }
+    user.remove((err) => {
+      cb(err);
+    });
+  });
+};
+
+User.pre("remove", function(next) {
+  Venue.update(
+    { isGoing: this._id },
+    { $pull: { isGoing: this._id } },
+    { multi: true },
+    (err) => {
+      next(err);
+    });
+});
+
 module.exports = mongoose.model("user", User);
