@@ -55,8 +55,7 @@ passport.use(
 passport.use(
   new TwitterStrategy({
     consumerKey: process.env.TWITTER_CONSUMER_KEY,
-    consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
-    callbackURL: "http://localhost:8124/auth/twitter/callback"
+    consumerSecret: process.env.TWITTER_CONSUMER_SECRET
   },
   Account.socialAuth("twitter")
   )
