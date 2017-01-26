@@ -2,7 +2,6 @@ require("dotenv").config({ path: "config/.env" });
 const path = require("path");
 const Account = require("./models/user");
 const express = require("express");
-const logger = require("connect-logger");
 const favicon = require("serve-favicon");
 const session = require("express-session");
 const bodyParser = require("body-parser");
@@ -40,7 +39,6 @@ app.set("PORT", process.env.PORT || 8124);
 app.set("view engine", "pug");
 app.set("views", path.join(process.cwd(), "client"));
 
-app.use(logger());
 app.use(express.static(path.join(process.cwd(), "build", "client")));
 app.use(express.static(path.join(process.cwd(), "client")));
 app.use(favicon(path.join(process.cwd(), "client", "media", "favicon.ico")));
@@ -82,6 +80,4 @@ app.use(user());
 app.use(yelp());
 app.use(routes());
 
-app.listen(app.get("PORT"), () => {
-  console.log("App listening on port: " + app.get("PORT"));
-});
+app.listen(app.get("PORT"));
