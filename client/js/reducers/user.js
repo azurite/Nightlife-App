@@ -11,6 +11,9 @@ const user = function(state, action) {
     case types.LOGOUT_SUCCESS:
       return null;
 
+    case types.DELETE_ACCOUNT_SUCCESS:
+      return null;
+
     case types.GOTO_OR_REMOVE_SUCCESS:
       return action.user;
 

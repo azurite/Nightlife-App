@@ -23,7 +23,11 @@ const initialState = {
     submit: Req.init()
   },
   user: null,
-  logout: Req.init()
+  logout: Req.init(),
+  delete: {
+    modalOpen: false,
+    status: Req.init()
+  }
 };
 
 module.exports = initialState;

@@ -81,6 +81,19 @@ const request = function() {
         cb(err);
       });
     },
+    deleteAccount: function deleteAccount(cb) {
+      Axios.delete("/api/user/deleteAccount")
+        .then((res) => {
+          if(res.data.statusCode === 500) {
+            return cb(res.data.error);
+          }
+          cb(null, res.data);
+        })
+        .catch((err) => {
+          attachMessage(err);
+          cb(err);
+        });
+    },
     addOrRemoveVenue: function addOrRemoveVenue(opt, cb) {
       Axios.post("/api/user/editVenue", opt)
       .then((res) => {

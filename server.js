@@ -66,8 +66,7 @@ passport.use(
 passport.use(
   new GithubStrategy({
     clientID: process.env.GITHUB_CLIENT_ID,
-    clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    callbackURL: "http://localhost:8124/auth/github/callback"
+    clientSecret: process.env.GITHUB_CLIENT_SECRET
   },
   Account.socialAuth("github")
   )
