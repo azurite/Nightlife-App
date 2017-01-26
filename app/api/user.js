@@ -5,10 +5,6 @@ const passport = require("passport");
 const express = require("express");
 const router = express.Router();
 
-// Todo:
-// -----
-// delete account
-
 router.post("/api/user/register", (req, res) => {
   var local = {
     name: req.body.name,
